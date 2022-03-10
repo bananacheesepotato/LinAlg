@@ -1,0 +1,70 @@
+\documentclass[letterpaper,12pt]{article}
+\usepackage{amsmath}
+\pagenumbering{gobble}
+\begin{document}
+
+\begin{center} \huge Solution to Homework 1 \\ \normalsize Alex Ni
+\end{center}
+\large
+\begin{eqnarray*}
+\log{2000xy}-\log{x}\log{y}=4\\ 
+\log{2yz}-\log{y}\log{z}=1\\
+\log{zx}-\log{z}\log{x}=0
+\end{eqnarray*}
+\noindent Simplify each equation:
+\begin{eqnarray*}
+\log{2}+\log{x}+\log{y}-\log{x}\log{y}=1\\ 
+\log{2}+\log{y}+\log{z}-\log{y}\log{z}=1\\
+\log{z}+\log{x}-\log{z}\log{x}=0
+\end{eqnarray*}
+
+\noindent Set equations 1 and 2 equal:\\
+$$\log{y}+\log{z}-\log{y}\log{z}=\log{x}+\log{y}-\log{x}\log{y}$$
+$$\log{z}-\log{y}\log{z}=\log{x}-\log{x}\log{y}$$
+$$(\log{z})(1-\log{y})=(\log{x})(1-\log{y})$$
+$$\log{z}=\log{x}$$
+$$z=x$$
+
+\noindent Take equation 3:\\
+$$\log{z}+\log{x}-\log{z}\log{x}=0$$
+$$1=\log{z}\log{x}-\log{z}-\log{x}+1$$
+$$1=(\log{x})^2-2\log{x}+1$$
+$$1=(\log{x}-1)^2$$
+$$\pm1=\log{x}-1$$
+\begin{equation*}
+\log{x}=
+\begin{cases}
+0\\
+2
+\end{cases}
+\end{equation*}
+\begin{equation*}
+x=
+\begin{cases}
+1\\
+100
+\end{cases}
+\end{equation*}
+\\ \\
+\noindent Case 1:\\
+$$x=1$$ $$z=1$$
+$$\log{2}+\log{y}+\log{z}-\log{y}\log{z}=1$$
+$$\log{2}+\log{y}+0-0=1$$
+$$\log{y}=\log{10}-\log{2}$$
+$$y=5$$
+\\
+\noindent Case 2:\\
+$$x=100$$ $$z=100$$
+$$\log{2}+\log{y}+\log{z}-\log{y}\log{z}=1$$
+$$\log{2}+\log{y}+2-2\log{y}=1$$
+$$\log{y}=\log{2}+\log{100}-\log{10}$$
+$$y=20$$
+
+\begin{equation*}
+{(x,y,z)}=\begin{cases}
+{(1,5,1)}\\
+{(100,20,100)}
+\end{cases}
+\end{equation*}
+
+\end{document}

@@ -1,0 +1,137 @@
+\documentclass[letterpaper,11pt]{article}
+%\usepackage{fullpage}
+\usepackage{geometry}
+ \geometry{
+ left=1in,right=1in,top=0.5in,bottom=0.5in
+ }
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[group-minimum-digits={3}]{siunitx}
+\pagenumbering{gobble}
+\begin{document}
+
+\begin{center} \textbf{Math 2210 \\ Fall 2021 \\ Project 1 -- Simplex Algorithm \\ Alex Ni \\}
+\hrulefill
+\end{center}
+
+%\large
+%\noindent\textbf{Introduction} \\ \\
+\subsubsection*{Introduction}
+%\normal
+The goal of this project is to maximize the benefits from consuming caffeinated drinks.
+
+
+\subsubsection*{Description of Scenario and Setup of Problem}
+I have become reliant on caffeinated drinks to work efficiently during the day. One cup of coffee gives me 50 extra minutes of efficient work time, while one cup of tea grants me 30 minutes. The efficient work time gained from drinking coffee and tea is 
+\begin{equation} \label{eq:1}
+P = 50x_1 + 30x_2,
+\end{equation}
+where $x_1, x_2 \geq 0$.
+This will be my objective function. My goal is to maximize the amount of efficient work time per week. \vspace{3mm}
+
+\noindent After some research, I find that Cornell sells coffee for \$4 a cup and tea for \$2 a bottle. Each week, I have a budget of \$120 to spend of caffeinated products.  This constraint is given by
+\begin{equation} \label{eq:2}
+4x_1 + 2x_2 \leq 120.
+\end{equation}
+I will also need to be mindful of my health. After some more research, I find that the daily healthy dosage of caffeine is 400mg.\footnote{\href{https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/caffeine/art-20045678}{https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/caffeine/art-20045678}} However, I am quite strong and can handle 480 mg a day, or 3,360 mg a week. Cornell's coffee is generic brand, containing 96 mg of caffeine per serving, while their tea is \textit{ITO EN} brand, containing 60 mg of caffeine per serving.\footnote{\href{https://itoen.com/products/ito-en-jasmine-green}{https://itoen.com/products/ito-en-jasmine-green}} This health constraint is given by
+\begin{equation} \label{eq:3}
+96x_1 + 60x_2 \leq \num[group-separator={,}]{3360}.
+\end{equation}
+I want to maximize the linear function in (\ref{eq:1}), subject to linear constraints in (\ref{eq:2}) and (\ref{eq:3}).
+
+
+\subsubsection*{Application of Simplex Algorithm}
+To solve this linear program, we start by introducing two slack variables
+\begin{align*}
+s_1 &= 120 - 4x_1 - 2x_2, \\
+s_2 &= \num[group-separator={,}]{3360} - 96x_1 - 60x_2,
+\end{align*}
+where $s1, s2 \geq 0$. This turns the linear program into a system of linear equations:
+\begin{align*}
+4x_1 + 2x_2 + s_1 &= 120,\\
+96x_1 + 60x_2 + s_2 &= \num[group-separator={,}]{3360},\\
+-50x_1 - 30x_2 + P &= 0,
+\end{align*}
+whose corresponding initial simplex tableau is the augmented matrix
+\begin{equation}
+\begin{bmatrix} \label{eq:4}
+4 & 2 & 1 & 0 & 0 & 120\\
+96 & 60 & 0 & 1 & 0 & \num[group-separator={,}]{3360}\\
+-50 & -30 & 0 & 0 & 1 & 0
+\end{bmatrix}
+\end{equation}
+The third row of (\ref{eq:4}) contains negative entries, thus pivot operations must be applied to entries of (\ref{eq:4}) until the third row does not contain negative entries. Since -50 is the most negative entry in the third row and it appears in the first column, the first column is the pivot column. For the pivot row, we compare ratios
+\begin{equation*}
+\frac{b_1}{a_{11}}=\frac{120}{4}=30  \mbox{ and }  \frac{b_2}{a_{21}}=\frac{\num[group-separator={,}]{3360}}{96}=35
+\end{equation*}
+
+\noindent Since 30 is less than 35, we will pivot on the first row.  Thus, we pivot on the (1,1) entry. To pivot, we perform row operations until $a_{12}$ and $a_{13}$ are zero. Replace the second row of (\ref{eq:4}) with the 24 times the first row minus  the second row:
+\begin{equation}
+\begin{bmatrix} \label{eq:5}
+4 & 2 & 1 & 0 & 0 & 120\\
+0 & -12 & 24 & -1 & 0 & -480\\
+-50 & -30 & 0 & 0 & 1 & 0
+\end{bmatrix}.
+\end{equation}
+
+\noindent Now replace the third row of (\ref{eq:5}) with $\frac{25}{2}$ times the first row plus the third row
+\begin{equation*}
+\begin{bmatrix}
+4 & 2 & 1 & 0 & 0 & 120\\
+0 & -12 & 24 & -1 & 0 & -480\\
+0 & -5 & \frac{25}{2} & 0 & 1 & \num[group-separator={,}]{1500}
+\end{bmatrix}.
+\end{equation*}
+
+\noindent Since the third row still contains a negative number, another pivot operation must be performed. Between $\frac{120}{2}$ and $\frac{-480}{-12}$, the latter is smaller and is thus the pivot entry is (2,2). For the row operations, replace the first row with 6 times the first row plus the second row, and the third row with $\frac{5}{12}$ times times the second row minus the third row to obtain
+\begin{equation*}
+\begin{bmatrix}
+24 & 0 & 30 & -1 & 0 & 240\\
+0 & -12 & 24 & -1 & 0 & -480\\
+0 & 0 & -\frac{5}{2} & -\frac{5}{12} & -1 & \num[group-separator={,}]{-1700}
+\end{bmatrix}.
+\end{equation*}
+
+\noindent No more pivot operations are needed since the third row shares the same sign. Simplify so that the solution can be read off: divide the first row by 24, the second row by -12, and the third row by -1
+\begin{equation}
+\begin{bmatrix} \label{eq:6}
+1 & 0 & \frac{5}{4} & -\frac{1}{24} & 0 & 10\\
+0 & 1 & -2 & \frac{1}{12} & 0 & 40\\
+0 & 0 & \frac{5}{2} & \frac{5}{12} & 1 & \num[group-separator={,}]{1700}
+\end{bmatrix}.
+\end{equation}
+
+\noindent To read off the solution from (\ref{eq:6}), set non-unit columns to zero, i.e., $s_{1} = 0$ and $s_{2} = 0$ The unit columns tell us that the maximum value of $P = \num[group-separator={,}]{1700}$ is attained when $x_{1} = 10$ and $x_{2} = 40$. \vspace{3mm}
+
+\noindent This optimal solution was verified by using the simplex algorithm calculator referenced below.
+
+
+\subsubsection*{Conclusion and Limitations}
+
+\noindent According to this analysis, I should consume 10 coffees and 40 teas per week for a maximum of \num[group-separator={,}]{1700} minutes, or approximately 28 hours of efficient work time (subject to my budget and health constraints). Here, I am assuming that my long-term health can keep up with my caffeine consumption, and that the price of coffee and tea stays constant; however, this may not happen if Cornell were to change the price of their goods (possibly due to my increased demand). In addition, my need could decrease if my workload decreases. My budget could also change if I realized the absurd amount I was spending weekly on 50 beverages per week.
+
+\subsubsection*{Sources}
+\noindent In addition to the sources in the first page footnote, I also used the following sources:
+\begin{itemize}
+\item \href{https://en.wikipedia.org/wiki/Simplex\_algorithm}{Simplex Algorithm}, Wikipedia, https://en.wikipedia.org/wiki/Simplex\_algorithm
+\item \href{https://math.libretexts.org/Bookshelves/Applied\_Mathematics/Applied\_Finite\_Mathematics\_(Sekhon\_and\_Bloom)/04\%3A\_Linear\_Programming\_The\_Simplex\_Method/4.02\%3A\_Maximization\_By\_The\_Simplex\_Method}{Applied Finite Mathematics}, by Rupinder Sekon and Roberta Bloom, LibreTexts
+\item \href{https://www.mathstools.com/section/main/simplex\_online\_calculator}{Simplex Algorithm Calculator}, https://www.mathstools.com/section/main/simplex\_online\_calculator
+\end{itemize}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
